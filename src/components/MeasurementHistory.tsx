@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { History, Search, Download, Eye, Calendar } from "lucide-react";
+import { History, Search, Download, Eye, Calendar, TrendingUp, Users, Zap } from "lucide-react";
 
 interface Measurement {
   id: string;
@@ -133,43 +133,45 @@ const MeasurementHistory = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Filters and Search */}
-      <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+      <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
         <div className="flex flex-col sm:flex-row gap-4 flex-1">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400 w-5 h-5" />
             <Input
               placeholder="Buscar por nome da paciente..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              className="pl-12 h-12 bg-white/50 backdrop-blur-sm border-blue-200/50 focus:border-blue-400"
             />
           </div>
           
           <Select value={selectedPatient} onValueChange={setSelectedPatient}>
-            <SelectTrigger className="w-full sm:w-48">
+            <SelectTrigger className="w-full sm:w-56 h-12 bg-white/50 border-blue-200/50 focus:border-blue-400">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="futuristic-card border-0">
               {patients.map((patient) => (
                 <SelectItem key={patient.id} value={patient.id}>
-                  {patient.name}
-                  {patient.id !== "all" && (
-                    <span className="ml-2 text-gray-500">
-                      ({getPatientMeasurementCount(patient.id)})
-                    </span>
-                  )}
+                  <div className="flex items-center justify-between w-full">
+                    <span>{patient.name}</span>
+                    {patient.id !== "all" && (
+                      <Badge variant="secondary" className="ml-2 text-xs">
+                        {getPatientMeasurementCount(patient.id)}
+                      </Badge>
+                    )}
+                  </div>
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
 
           <Select value={sortBy} onValueChange={(value: "date" | "patient") => setSortBy(value)}>
-            <SelectTrigger className="w-full sm:w-40">
+            <SelectTrigger className="w-full sm:w-40 h-12 bg-white/50 border-blue-200/50 focus:border-blue-400">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="futuristic-card border-0">
               <SelectItem value="date">Por Data</SelectItem>
               <SelectItem value="patient">Por Paciente</SelectItem>
             </SelectContent>
@@ -178,52 +180,69 @@ const MeasurementHistory = () => {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-blue-600">{measurements.length}</div>
-            <div className="text-sm text-gray-600">Total de Medições</div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <Card className="futuristic-card border-0">
+          <CardContent className="p-6 text-center">
+            <div className="flex items-center justify-center mb-3">
+              <div className="p-3 bg-blue-100 rounded-xl">
+                <TrendingUp className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+            <div className="text-3xl font-bold text-blue-900 mb-1">{measurements.length}</div>
+            <div className="text-sm text-slate-600">Total de Medições</div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-green-600">
+        <Card className="futuristic-card border-0">
+          <CardContent className="p-6 text-center">
+            <div className="flex items-center justify-center mb-3">
+              <div className="p-3 bg-blue-100 rounded-xl">
+                <Users className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+            <div className="text-3xl font-bold text-blue-900 mb-1">
               {new Set(measurements.map(m => m.patient_id)).size}
             </div>
-            <div className="text-sm text-gray-600">Pacientes Avaliadas</div>
+            <div className="text-sm text-slate-600">Pacientes Avaliadas</div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-purple-600">
+        <Card className="futuristic-card border-0">
+          <CardContent className="p-6 text-center">
+            <div className="flex items-center justify-center mb-3">
+              <div className="p-3 bg-blue-100 rounded-xl">
+                <Zap className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+            <div className="text-3xl font-bold text-blue-900 mb-1">
               {measurements.filter(m => m.scale_method === "lidar").length}
             </div>
-            <div className="text-sm text-gray-600">Medições LiDAR</div>
+            <div className="text-sm text-slate-600">Medições LiDAR</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Measurements List */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         {filteredMeasurements.map((measurement) => (
-          <Card key={measurement.id} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <Card key={measurement.id} className="futuristic-card hover:shadow-2xl transition-all duration-300 border-0">
+            <CardContent className="p-8">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 {/* Patient Info */}
-                <div className="flex items-center space-x-4">
-                  <Avatar className="h-12 w-12">
-                    <AvatarFallback className="bg-blue-100 text-blue-700 font-semibold">
+                <div className="flex items-center space-x-6">
+                  <Avatar className="h-16 w-16 border-2 border-blue-200">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-100 to-blue-50 text-blue-900 font-bold text-lg">
                       {getInitials(measurement.patient_name)}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="font-medium text-lg">{measurement.patient_name}</h3>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Calendar className="w-4 h-4" />
-                      {formatDate(measurement.date)}
+                    <h3 className="font-semibold text-xl text-slate-800 mb-2">{measurement.patient_name}</h3>
+                    <div className="flex items-center gap-4 text-sm text-slate-600">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-blue-500" />
+                        {formatDate(measurement.date)}
+                      </div>
                       <Badge 
                         variant={measurement.scale_method === "lidar" ? "default" : "secondary"}
-                        className="ml-2"
+                        className={measurement.scale_method === "lidar" ? "bg-blue-900 hover:bg-blue-800" : ""}
                       >
                         {measurement.scale_method === "lidar" ? "LiDAR" : "Régua"}
                       </Badge>
@@ -232,33 +251,33 @@ const MeasurementHistory = () => {
                 </div>
 
                 {/* Measurements Preview */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
-                  <div>
-                    <div className="text-sm font-medium text-blue-600">{measurement.ij_ap_cm} cm</div>
-                    <div className="text-xs text-gray-500">IJ-AP</div>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="text-center p-3 bg-blue-50/50 rounded-lg">
+                    <div className="text-lg font-bold text-blue-900">{measurement.ij_ap_cm} cm</div>
+                    <div className="text-xs text-slate-500 font-medium">IJ-AP</div>
                   </div>
-                  <div>
-                    <div className="text-sm font-medium text-green-600">{measurement.ax_ap_cm} cm</div>
-                    <div className="text-xs text-gray-500">Ax-AP</div>
+                  <div className="text-center p-3 bg-blue-50/50 rounded-lg">
+                    <div className="text-lg font-bold text-blue-900">{measurement.ax_ap_cm} cm</div>
+                    <div className="text-xs text-slate-500 font-medium">Ax-AP</div>
                   </div>
-                  <div>
-                    <div className="text-sm font-medium text-purple-600">{measurement.xi_pap_cm} cm</div>
-                    <div className="text-xs text-gray-500">XI-PAP</div>
+                  <div className="text-center p-3 bg-blue-50/50 rounded-lg">
+                    <div className="text-lg font-bold text-blue-900">{measurement.xi_pap_cm} cm</div>
+                    <div className="text-xs text-slate-500 font-medium">XI-PAP</div>
                   </div>
-                  <div>
-                    <div className="text-sm font-medium text-orange-600">{measurement.base_cm} cm</div>
-                    <div className="text-xs text-gray-500">Base</div>
+                  <div className="text-center p-3 bg-blue-50/50 rounded-lg">
+                    <div className="text-lg font-bold text-blue-900">{measurement.base_cm} cm</div>
+                    <div className="text-xs text-slate-500 font-medium">Base</div>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline">
-                    <Eye className="w-4 h-4 mr-1" />
+                <div className="flex gap-3">
+                  <Button size="sm" variant="outline" className="border-blue-200 hover:bg-blue-50">
+                    <Eye className="w-4 h-4 mr-2" />
                     Visualizar
                   </Button>
-                  <Button size="sm" variant="outline">
-                    <Download className="w-4 h-4 mr-1" />
+                  <Button size="sm" variant="outline" className="border-blue-200 hover:bg-blue-50">
+                    <Download className="w-4 h-4 mr-2" />
                     PDF
                   </Button>
                 </div>
@@ -266,9 +285,12 @@ const MeasurementHistory = () => {
 
               {/* AI Observations */}
               {measurement.ai_observations && (
-                <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                  <h4 className="text-sm font-medium text-gray-700 mb-1">Observações da IA:</h4>
-                  <p className="text-sm text-gray-600">{measurement.ai_observations}</p>
+                <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-slate-50 rounded-xl border border-blue-100/50">
+                  <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-blue-600" />
+                    Observações da IA:
+                  </h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">{measurement.ai_observations}</p>
                 </div>
               )}
             </CardContent>
@@ -277,18 +299,20 @@ const MeasurementHistory = () => {
       </div>
 
       {filteredMeasurements.length === 0 && (
-        <div className="text-center py-12">
-          <History className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-600 mb-2">
-            {searchTerm || selectedPatient !== "all" 
-              ? "Nenhuma medição encontrada" 
-              : "Nenhuma medição realizada"}
-          </h3>
-          <p className="text-gray-500">
-            {searchTerm || selectedPatient !== "all"
-              ? "Tente ajustar os filtros de busca"
-              : "As medições aparecerão aqui após serem realizadas"}
-          </p>
+        <div className="text-center py-16">
+          <div className="futuristic-card max-w-md mx-auto p-12">
+            <History className="w-20 h-20 text-blue-300 mx-auto mb-6" />
+            <h3 className="text-xl font-semibold text-slate-700 mb-4">
+              {searchTerm || selectedPatient !== "all" 
+                ? "Nenhuma medição encontrada" 
+                : "Nenhuma medição realizada"}
+            </h3>
+            <p className="text-slate-500">
+              {searchTerm || selectedPatient !== "all"
+                ? "Tente ajustar os filtros de busca"
+                : "As medições aparecerão aqui após serem realizadas"}
+            </p>
+          </div>
         </div>
       )}
     </div>
