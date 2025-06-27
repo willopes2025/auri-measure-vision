@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Medical-themed design system with professional clinical colors */
+/* Medical-themed design system with navy blue, white and light blue colors */
 
 @layer base {
   :root {
@@ -16,35 +16,35 @@
     --popover: 255 255 255;
     --popover-foreground: 15 23 42;
 
-    --primary: 59 130 246;
+    --primary: 30 58 138;
     --primary-foreground: 255 255 255;
 
     --secondary: 241 245 249;
-    --secondary-foreground: 51 65 85;
+    --secondary-foreground: 30 58 138;
 
     --muted: 241 245 249;
-    --muted-foreground: 100 116 139;
+    --muted-foreground: 71 85 105;
 
-    --accent: 16 185 129;
-    --accent-foreground: 255 255 255;
+    --accent: 147 197 253;
+    --accent-foreground: 30 58 138;
 
     --destructive: 239 68 68;
     --destructive-foreground: 255 255 255;
 
     --border: 226 232 240;
     --input: 226 232 240;
-    --ring: 59 130 246;
+    --ring: 30 58 138;
 
     --radius: 0.75rem;
 
     --sidebar-background: 255 255 255;
-    --sidebar-foreground: 51 65 85;
-    --sidebar-primary: 59 130 246;
+    --sidebar-foreground: 30 58 138;
+    --sidebar-primary: 30 58 138;
     --sidebar-primary-foreground: 255 255 255;
     --sidebar-accent: 241 245 249;
-    --sidebar-accent-foreground: 51 65 85;
+    --sidebar-accent-foreground: 30 58 138;
     --sidebar-border: 226 232 240;
-    --sidebar-ring: 59 130 246;
+    --sidebar-ring: 30 58 138;
   }
 
   .dark {
@@ -57,8 +57,8 @@
     --popover: 30 41 59;
     --popover-foreground: 248 250 252;
 
-    --primary: 59 130 246;
-    --primary-foreground: 255 255 255;
+    --primary: 147 197 253;
+    --primary-foreground: 15 23 42;
 
     --secondary: 51 65 85;
     --secondary-foreground: 226 232 240;
@@ -66,7 +66,7 @@
     --muted: 51 65 85;
     --muted-foreground: 148 163 184;
 
-    --accent: 16 185 129;
+    --accent: 30 58 138;
     --accent-foreground: 255 255 255;
 
     --destructive: 239 68 68;
@@ -74,16 +74,16 @@
 
     --border: 51 65 85;
     --input: 51 65 85;
-    --ring: 59 130 246;
+    --ring: 147 197 253;
 
     --sidebar-background: 30 41 59;
     --sidebar-foreground: 226 232 240;
-    --sidebar-primary: 59 130 246;
-    --sidebar-primary-foreground: 255 255 255;
+    --sidebar-primary: 147 197 253;
+    --sidebar-primary-foreground: 15 23 42;
     --sidebar-accent: 51 65 85;
     --sidebar-accent-foreground: 226 232 240;
     --sidebar-border: 51 65 85;
-    --sidebar-ring: 59 130 246;
+    --sidebar-ring: 147 197 253;
   }
 }
 
@@ -98,13 +98,13 @@
   }
 }
 
-/* Medical gradient backgrounds */
+/* Medical gradient backgrounds with navy blue theme */
 .medical-gradient {
-  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
 }
 
 .accent-gradient {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
 }
 
 .subtle-gradient {

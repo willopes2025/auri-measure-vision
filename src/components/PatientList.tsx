@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -121,7 +120,7 @@ const PatientList = () => {
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="medical-gradient text-white hover:opacity-90 transition-all">
+            <Button className="bg-blue-900 text-white hover:bg-blue-800 transition-all">
               <Plus className="w-4 h-4 mr-2" />
               Nova Paciente
             </Button>
@@ -129,7 +128,7 @@ const PatientList = () => {
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-blue-600" />
+                <Users className="w-5 h-5 text-blue-900" />
                 Cadastrar Nova Paciente
               </DialogTitle>
             </DialogHeader>
@@ -162,7 +161,7 @@ const PatientList = () => {
                   placeholder="email@exemplo.com"
                 />
               </div>
-              <Button onClick={handleAddPatient} className="w-full medical-gradient text-white">
+              <Button onClick={handleAddPatient} className="w-full bg-blue-900 text-white hover:bg-blue-800">
                 Cadastrar Paciente
               </Button>
             </div>
@@ -173,11 +172,11 @@ const PatientList = () => {
       {/* Patients Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredPatients.map((patient) => (
-          <Card key={patient.id} className="hover:shadow-md transition-shadow cursor-pointer border-l-4 border-l-blue-500">
+          <Card key={patient.id} className="hover:shadow-md transition-shadow cursor-pointer border-l-4 border-l-blue-900">
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-3">
                 <Avatar className="h-12 w-12">
-                  <AvatarFallback className="bg-blue-100 text-blue-700 font-semibold">
+                  <AvatarFallback className="bg-blue-100 text-blue-900 font-semibold">
                     {getInitials(patient.nome)}
                   </AvatarFallback>
                 </Avatar>
@@ -224,7 +223,7 @@ const PatientList = () => {
             }
           </p>
           {!searchTerm && (
-            <Button onClick={() => setIsDialogOpen(true)} className="medical-gradient text-white">
+            <Button onClick={() => setIsDialogOpen(true)} className="bg-blue-900 text-white hover:bg-blue-800">
               <Plus className="w-4 h-4 mr-2" />
               Cadastrar Primeira Paciente
             </Button>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -39,21 +38,21 @@ const Index = () => {
             <TabsList className="grid w-full max-w-md grid-cols-3 bg-white shadow-lg border">
               <TabsTrigger 
                 value="patients" 
-                className="flex items-center gap-2 data-[state=active]:medical-gradient data-[state=active]:text-white"
+                className="flex items-center gap-2 data-[state=active]:bg-blue-900 data-[state=active]:text-white"
               >
                 <Users className="w-4 h-4" />
                 <span className="hidden sm:inline">Pacientes</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="assessment" 
-                className="flex items-center gap-2 data-[state=active]:medical-gradient data-[state=active]:text-white"
+                className="flex items-center gap-2 data-[state=active]:bg-blue-900 data-[state=active]:text-white"
               >
                 <Camera className="w-4 h-4" />
                 <span className="hidden sm:inline">Nova Avaliação</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="history" 
-                className="flex items-center gap-2 data-[state=active]:medical-gradient data-[state=active]:text-white"
+                className="flex items-center gap-2 data-[state=active]:bg-blue-900 data-[state=active]:text-white"
               >
                 <History className="w-4 h-4" />
                 <span className="hidden sm:inline">Histórico</span>
@@ -67,7 +66,7 @@ const Index = () => {
               <Card className="shadow-lg border-0">
                 <CardHeader className="subtle-gradient">
                   <CardTitle className="flex items-center gap-2 text-slate-800">
-                    <Users className="w-5 h-5 text-blue-600" />
+                    <Users className="w-5 h-5 text-blue-900" />
                     Gestão de Pacientes
                   </CardTitle>
                   <CardDescription>
@@ -84,7 +83,7 @@ const Index = () => {
               <Card className="shadow-lg border-0">
                 <CardHeader className="subtle-gradient">
                   <CardTitle className="flex items-center gap-2 text-slate-800">
-                    <Camera className="w-5 h-5 text-blue-600" />
+                    <Camera className="w-5 h-5 text-blue-900" />
                     Nova Avaliação
                   </CardTitle>
                   <CardDescription>
@@ -101,7 +100,7 @@ const Index = () => {
               <Card className="shadow-lg border-0">
                 <CardHeader className="subtle-gradient">
                   <CardTitle className="flex items-center gap-2 text-slate-800">
-                    <History className="w-5 h-5 text-blue-600" />
+                    <History className="w-5 h-5 text-blue-900" />
                     Histórico de Medições
                   </CardTitle>
                   <CardDescription>
@@ -118,10 +117,10 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-800 text-slate-300 py-8 mt-16">
+      <footer className="bg-blue-900 text-blue-100 py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm">© 2024 Simulador de Medidas Mamárias IA - Tecnologia Médica Avançada</p>
-          <p className="text-xs mt-2 text-slate-400">
+          <p className="text-xs mt-2 text-blue-200">
             Sistema desenvolvido com conformidade LGPD e padrões médicos internacionais
           </p>
         </div>
