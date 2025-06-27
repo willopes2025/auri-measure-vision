@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Camera, Upload, Smartphone, Ruler, CheckCircle, AlertTriangle } from "lucide-react";
+import { Camera, Upload, Smartphone, Ruler, CheckCircle, AlertTriangle, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Patient {
