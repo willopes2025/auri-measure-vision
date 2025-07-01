@@ -15,12 +15,19 @@ export const usePatients = () => {
   const fetchPatients = async () => {
     try {
       setLoading(true);
+      console.log('Buscando pacientes...');
+      
       const { data, error } = await supabase
         .from('patients')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Erro do Supabase:', error);
+        throw error;
+      }
+      
+      console.log('Pacientes encontrados:', data?.length || 0);
       setPatients(data || []);
     } catch (error) {
       console.error('Erro ao buscar pacientes:', error);
@@ -29,6 +36,7 @@ export const usePatients = () => {
         description: "Não foi possível carregar a lista de pacientes",
         variant: "destructive",
       });
+      setPatients([]);
     } finally {
       setLoading(false);
     }
@@ -36,15 +44,22 @@ export const usePatients = () => {
 
   const addPatient = async (patientData: Omit<PatientInsert, 'id' | 'created_at' | 'updated_at'>) => {
     try {
+      console.log('Adicionando paciente:', patientData);
+      
       const { data, error } = await supabase
         .from('patients')
         .insert(patientData)
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Erro ao inserir paciente:', error);
+        throw error;
+      }
       
+      console.log('Paciente adicionado com sucesso:', data);
       setPatients(prev => [data, ...prev]);
+      
       toast({
         title: "Sucesso",
         description: "Paciente cadastrado com sucesso",
@@ -62,18 +77,25 @@ export const usePatients = () => {
     }
   };
 
-  const updatePatient = async (id: string, updates: Partial<PatientInsert>) => {
+  const updatePatient = async (id: string, updates: Partial<Omit<PatientInsert, 'id' | 'created_at' | 'updated_at'>>) => {
     try {
+      console.log('Atualizando paciente:', id, updates);
+      
       const { data, error } = await supabase
         .from('patients')
-        .update({ ...updates, updated_at: new Date().toISOString() })
+        .update(updates)
         .eq('id', id)
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Erro ao atualizar paciente:', error);
+        throw error;
+      }
       
+      console.log('Paciente atualizado com sucesso:', data);
       setPatients(prev => prev.map(p => p.id === id ? data : p));
+      
       toast({
         title: "Sucesso",
         description: "Paciente atualizado com sucesso",
@@ -93,14 +115,21 @@ export const usePatients = () => {
 
   const deletePatient = async (id: string) => {
     try {
+      console.log('Removendo paciente:', id);
+      
       const { error } = await supabase
         .from('patients')
         .delete()
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Erro ao remover paciente:', error);
+        throw error;
+      }
       
+      console.log('Paciente removido com sucesso');
       setPatients(prev => prev.filter(p => p.id !== id));
+      
       toast({
         title: "Sucesso",
         description: "Paciente removido com sucesso",
