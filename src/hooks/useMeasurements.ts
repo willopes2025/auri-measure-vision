@@ -28,7 +28,7 @@ export const useMeasurements = (patientId?: string) => {
         .from('measurements')
         .select(`
           *,
-          patients (
+          patients!inner (
             nome,
             email
           )
