@@ -16,12 +16,14 @@ import {
   Shield,
   Clock,
   Award,
-  TrendingUp
+  TrendingUp,
+  Sparkles
 } from "lucide-react";
 import { PatientList } from "@/components/PatientList";
 import { NewMeasurementForm } from "@/components/NewMeasurementForm";
 import MeasurementHistory from "@/components/MeasurementHistory";
 import { DatabaseStatus } from "@/components/DatabaseStatus";
+import { AIIntegratedMeasurement } from "@/components/AIIntegratedMeasurement";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -42,6 +44,16 @@ const Index = () => {
               Sistema avançado para análise e medição mamária com inteligência artificial,
               utilizando tecnologia LiDAR e processamento de imagem de última geração.
             </p>
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <Badge variant="secondary" className="bg-purple-500/30 text-purple-100 border-purple-400/30">
+                <Sparkles className="h-3 w-3 mr-1" />
+                OpenAI Integrado
+              </Badge>
+              <Badge variant="secondary" className="bg-green-500/30 text-green-100 border-green-400/30">
+                <Zap className="h-3 w-3 mr-1" />
+                IA Ativo
+              </Badge>
+            </div>
           </div>
           
           {/* Quick Stats */}
@@ -50,7 +62,7 @@ const Index = () => {
               { icon: Shield, label: "Precisão", value: "99.5%", color: "bg-green-500" },
               { icon: Zap, label: "Velocidade", value: "<3s", color: "bg-yellow-500" },
               { icon: Award, label: "Certificado", value: "ISO", color: "bg-blue-500" },
-              { icon: TrendingUp, label: "Melhorias", value: "+15%", color: "bg-purple-500" }
+              { icon: TrendingUp, label: "IA OpenAI", value: "GPT-4", color: "bg-purple-500" }
             ].map((stat, index) => (
               <div key={index} className="stats-card p-4 rounded-xl">
                 <div className="flex items-center gap-3">
@@ -75,10 +87,11 @@ const Index = () => {
         {/* Enhanced Tabs */}
         <div className="max-w-7xl mx-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-            <TabsList className="grid w-full grid-cols-4 tab-blue-gradient p-1 rounded-2xl shadow-lg">
+            <TabsList className="grid w-full grid-cols-5 tab-blue-gradient p-1 rounded-2xl shadow-lg">
               {[
                 { value: "overview", icon: BarChart3, label: "Visão Geral" },
                 { value: "patients", icon: Users, label: "Pacientes" },
+                { value: "ai-assessment", icon: Brain, label: "Avaliação IA" },
                 { value: "new-assessment", icon: Plus, label: "Nova Avaliação" },
                 { value: "history", icon: Clock, label: "Histórico" }
               ].map((tab) => (
@@ -89,6 +102,11 @@ const Index = () => {
                 >
                   <tab.icon className="h-5 w-5 mr-2" />
                   {tab.label}
+                  {tab.value === 'ai-assessment' && (
+                    <Badge variant="secondary" className="ml-2 bg-purple-500/50 text-purple-100 text-xs">
+                      IA
+                    </Badge>
+                  )}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -101,8 +119,8 @@ const Index = () => {
                     icon: Brain,
                     title: "IA Avançada",
                     description: "Análise automatizada com precisão clínica",
-                    badge: "Machine Learning",
-                    details: "Algoritmos treinados para detectar e medir estruturas anatômicas com precisão médica certificada e validação contínua.",
+                    badge: "OpenAI GPT-4",
+                    details: "Algoritmos treinados para detectar e medir estruturas anatômicas com precisão médica certificada e validação contínua usando IA.",
                     color: "from-purple-500 to-purple-600"
                   },
                   {
@@ -155,10 +173,10 @@ const Index = () => {
                     <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
                       <Zap className="w-5 h-5 text-white" />
                     </div>
-                    Como Funciona
+                    Como Funciona com IA
                   </CardTitle>
                   <CardDescription className="text-lg text-blue-200">
-                    Processo simplificado e otimizado em 4 etapas
+                    Processo simplificado e otimizado em 4 etapas com inteligência artificial
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-8">
@@ -181,14 +199,14 @@ const Index = () => {
                       {
                         step: "3",
                         title: "Análise IA",
-                        description: "IA processa automaticamente e detecta pontos de medição com precisão",
+                        description: "IA processa automaticamente e detecta pontos de medição com precisão OpenAI",
                         icon: Brain,
                         color: "bg-purple-500"
                       },
                       {
                         step: "4",
                         title: "Resultados",
-                        description: "Visualize medidas precisas, relatórios e histórico completo do paciente",
+                        description: "Visualize medidas precisas, relatórios IA e histórico completo do paciente",
                         icon: BarChart3,
                         color: "bg-orange-500"
                       }
@@ -215,6 +233,10 @@ const Index = () => {
 
             <TabsContent value="patients">
               <PatientList />
+            </TabsContent>
+
+            <TabsContent value="ai-assessment">
+              <AIIntegratedMeasurement />
             </TabsContent>
 
             <TabsContent value="new-assessment">
