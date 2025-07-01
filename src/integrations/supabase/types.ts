@@ -9,7 +9,109 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      measurement_values: {
+        Row: {
+          created_at: string
+          id: string
+          measurement_id: string
+          measurement_type: string
+          value_cm: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          measurement_id: string
+          measurement_type: string
+          value_cm: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          measurement_id?: string
+          measurement_type?: string
+          value_cm?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "measurement_values_measurement_id_fkey"
+            columns: ["measurement_id"]
+            isOneToOne: false
+            referencedRelation: "measurements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      measurements: {
+        Row: {
+          ai_observations: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          measurements_data: Json
+          patient_id: string
+          scale_method: string
+          updated_at: string
+        }
+        Insert: {
+          ai_observations?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          measurements_data: Json
+          patient_id: string
+          scale_method: string
+          updated_at?: string
+        }
+        Update: {
+          ai_observations?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          measurements_data?: Json
+          patient_id?: string
+          scale_method?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "measurements_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patients: {
+        Row: {
+          created_at: string
+          data_nascimento: string
+          email: string
+          id: string
+          nome: string
+          telefone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data_nascimento: string
+          email: string
+          id?: string
+          nome: string
+          telefone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data_nascimento?: string
+          email?: string
+          id?: string
+          nome?: string
+          telefone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
