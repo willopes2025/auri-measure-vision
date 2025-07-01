@@ -16,7 +16,8 @@ import {
   FileText,
   Clock,
   Smartphone,
-  Brain
+  Brain,
+  Ruler
 } from 'lucide-react';
 import { usePatients } from '@/hooks/usePatients';
 import { useMeasurements } from '@/hooks/useMeasurements';
