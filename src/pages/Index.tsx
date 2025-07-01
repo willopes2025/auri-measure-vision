@@ -21,37 +21,38 @@ import {
 import { PatientList } from "@/components/PatientList";
 import { NewMeasurementForm } from "@/components/NewMeasurementForm";
 import MeasurementHistory from "@/components/MeasurementHistory";
+import { DatabaseStatus } from "@/components/DatabaseStatus";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
-    <div className="min-h-screen medical-gradient relative">
-      <div className="container mx-auto px-4 py-8 relative z-10">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="container mx-auto px-4 py-8">
         {/* Enhanced Header */}
         <div className="text-center mb-12">
           <div className="mb-6">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl mb-6 border border-white/30">
-              <Brain className="w-10 h-10 text-white" />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-primary/20 backdrop-blur-sm rounded-2xl mb-6 border border-primary/30">
+              <Brain className="w-10 h-10 text-primary" />
             </div>
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
+            <h1 className="text-5xl font-bold text-slate-800 mb-4 tracking-tight">
               Simulador de Medidas Mamárias IA
             </h1>
-            <p className="text-blue-100 text-xl max-w-3xl mx-auto leading-relaxed">
+            <p className="text-slate-600 text-xl max-w-3xl mx-auto leading-relaxed">
               Sistema avançado para análise e medição mamária com inteligência artificial,
               utilizando tecnologia LiDAR e processamento de imagem de última geração.
             </p>
           </div>
           
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-8">
             {[
               { icon: Shield, label: "Precisão", value: "99.5%", color: "bg-green-500" },
               { icon: Zap, label: "Velocidade", value: "<3s", color: "bg-yellow-500" },
               { icon: Award, label: "Certificado", value: "ISO", color: "bg-blue-500" },
               { icon: TrendingUp, label: "Melhorias", value: "+15%", color: "bg-purple-500" }
             ].map((stat, index) => (
-              <div key={index} className="stats-card p-4 rounded-xl">
+              <div key={index} className="futuristic-card p-4 rounded-xl">
                 <div className="flex items-center gap-3">
                   <div className={`p-2 ${stat.color} rounded-lg`}>
                     <stat.icon className="w-4 h-4 text-white" />
@@ -64,12 +65,17 @@ const Index = () => {
               </div>
             ))}
           </div>
+
+          {/* Database Status */}
+          <div className="max-w-md mx-auto mb-8">
+            <DatabaseStatus />
+          </div>
         </div>
 
         {/* Enhanced Tabs */}
         <div className="max-w-7xl mx-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-            <TabsList className="grid w-full grid-cols-4 bg-white/15 backdrop-blur-xl border border-white/30 p-1 rounded-2xl">
+            <TabsList className="grid w-full grid-cols-4 bg-white/80 backdrop-blur-xl border border-slate-200 p-1 rounded-2xl shadow-lg">
               {[
                 { value: "overview", icon: BarChart3, label: "Visão Geral" },
                 { value: "patients", icon: Users, label: "Pacientes" },
@@ -79,7 +85,7 @@ const Index = () => {
                 <TabsTrigger 
                   key={tab.value}
                   value={tab.value}
-                  className="data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-lg text-white font-medium py-3 px-6 rounded-xl transition-all duration-200"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-700 font-medium py-3 px-6 rounded-xl transition-all duration-200 hover:bg-slate-100"
                 >
                   <tab.icon className="h-5 w-5 mr-2" />
                   {tab.label}
@@ -124,16 +130,16 @@ const Index = () => {
                       <CardTitle className="flex items-center gap-2 text-primary text-lg">
                         {feature.title}
                       </CardTitle>
-                      <CardDescription className="text-base">
+                      <CardDescription className="text-base text-slate-600">
                         {feature.description}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        <Badge variant="secondary" className="bg-accent/20 text-primary font-medium">
+                        <Badge variant="secondary" className="bg-primary/10 text-primary font-medium">
                           {feature.badge}
                         </Badge>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <p className="text-sm text-slate-600 leading-relaxed">
                           {feature.details}
                         </p>
                       </div>
@@ -144,14 +150,14 @@ const Index = () => {
 
               {/* How it Works Section */}
               <Card className="futuristic-card overflow-hidden">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
+                <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50 border-b border-slate-200">
                   <CardTitle className="text-primary text-2xl flex items-center gap-3">
                     <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
                       <Zap className="w-5 h-5 text-white" />
                     </div>
                     Como Funciona
                   </CardTitle>
-                  <CardDescription className="text-lg">
+                  <CardDescription className="text-lg text-slate-600">
                     Processo simplificado e otimizado em 4 etapas
                   </CardDescription>
                 </CardHeader>
@@ -196,7 +202,7 @@ const Index = () => {
                           <item.icon className="w-5 h-5 text-white" />
                         </div>
                         <h3 className="font-bold text-primary text-lg">{item.title}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed max-w-48">{item.description}</p>
+                        <p className="text-sm text-slate-600 leading-relaxed max-w-48">{item.description}</p>
                         {index < 3 && (
                           <ChevronRight className="h-6 w-6 text-primary/30 hidden lg:block absolute -right-4 top-8 group-hover:text-primary/60 transition-colors" />
                         )}
