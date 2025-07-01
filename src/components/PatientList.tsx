@@ -14,7 +14,9 @@ import {
   Plus,
   Activity,
   FileText,
-  Clock
+  Clock,
+  Smartphone,
+  Brain
 } from 'lucide-react';
 import { usePatients } from '@/hooks/usePatients';
 import { useMeasurements } from '@/hooks/useMeasurements';
