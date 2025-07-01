@@ -66,10 +66,10 @@ export const DatabaseStatus: React.FC = () => {
   }, []);
 
   return (
-    <Card className="futuristic-card">
+    <Card className="card-blue-gradient">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-primary">
+          <CardTitle className="flex items-center gap-2 text-white">
             <Database className="h-5 w-5" />
             Status do Banco de Dados
           </CardTitle>
@@ -78,6 +78,7 @@ export const DatabaseStatus: React.FC = () => {
             size="sm"
             onClick={checkDatabaseStatus}
             disabled={loading}
+            className="bg-blue-600/50 border-blue-400/50 text-white hover:bg-blue-500/70"
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Atualizar
@@ -87,30 +88,30 @@ export const DatabaseStatus: React.FC = () => {
       <CardContent className="space-y-4">
         <div className="flex items-center gap-2">
           {status.connected ? (
-            <CheckCircle className="h-5 w-5 text-green-500" />
+            <CheckCircle className="h-5 w-5 text-green-400" />
           ) : (
-            <XCircle className="h-5 w-5 text-red-500" />
+            <XCircle className="h-5 w-5 text-red-400" />
           )}
-          <span className="font-medium">
+          <span className="font-medium text-white">
             Conexão: 
           </span>
-          <Badge variant={status.connected ? 'default' : 'destructive'}>
+          <Badge variant={status.connected ? 'default' : 'destructive'} className={status.connected ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}>
             {status.connected ? 'Conectado' : 'Desconectado'}
           </Badge>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-blue-50 p-3 rounded-lg text-center">
-            <div className="text-2xl font-bold text-blue-600">{status.patients}</div>
-            <div className="text-sm text-blue-600">Pacientes</div>
+          <div className="bg-blue-600/40 p-3 rounded-lg text-center border border-blue-500/30">
+            <div className="text-2xl font-bold text-white">{status.patients}</div>
+            <div className="text-sm text-blue-200">Pacientes</div>
           </div>
-          <div className="bg-green-50 p-3 rounded-lg text-center">
-            <div className="text-2xl font-bold text-green-600">{status.measurements}</div>
-            <div className="text-sm text-green-600">Medições</div>
+          <div className="bg-blue-600/40 p-3 rounded-lg text-center border border-blue-500/30">
+            <div className="text-2xl font-bold text-white">{status.measurements}</div>
+            <div className="text-sm text-blue-200">Medições</div>
           </div>
         </div>
 
-        <div className="text-xs text-muted-foreground text-center">
+        <div className="text-xs text-blue-300 text-center">
           Última verificação: {status.lastCheck.toLocaleTimeString('pt-BR')}
         </div>
       </CardContent>
