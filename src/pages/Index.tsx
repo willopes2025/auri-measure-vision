@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +14,7 @@ import {
 } from "lucide-react";
 import { PatientList } from "@/components/PatientList";
 import { NewMeasurementForm } from "@/components/NewMeasurementForm";
-import { MeasurementHistory } from "@/components/MeasurementHistory";
+import MeasurementHistory from "@/components/MeasurementHistory";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
