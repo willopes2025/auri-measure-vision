@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -143,21 +142,21 @@ const MeasurementHistory = () => {
               placeholder="Buscar por nome da paciente..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-12 h-12 bg-white/50 backdrop-blur-sm border-blue-200/50 focus:border-blue-400"
+              className="pl-12 h-12 medical-input text-white placeholder-blue-200"
             />
           </div>
           
           <Select value={selectedPatient} onValueChange={setSelectedPatient}>
-            <SelectTrigger className="w-full sm:w-56 h-12 bg-white/50 border-blue-200/50 focus:border-blue-400">
+            <SelectTrigger className="w-full sm:w-56 h-12 medical-input text-white">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="futuristic-card border-0">
               {patients.map((patient) => (
                 <SelectItem key={patient.id} value={patient.id}>
                   <div className="flex items-center justify-between w-full">
-                    <span>{patient.name}</span>
+                    <span className="text-white">{patient.name}</span>
                     {patient.id !== "all" && (
-                      <Badge variant="secondary" className="ml-2 text-xs">
+                      <Badge variant="secondary" className="ml-2 text-xs bg-blue-500/30 text-blue-100 border-blue-400/30">
                         {getPatientMeasurementCount(patient.id)}
                       </Badge>
                     )}
@@ -168,12 +167,12 @@ const MeasurementHistory = () => {
           </Select>
 
           <Select value={sortBy} onValueChange={(value: "date" | "patient") => setSortBy(value)}>
-            <SelectTrigger className="w-full sm:w-40 h-12 bg-white/50 border-blue-200/50 focus:border-blue-400">
+            <SelectTrigger className="w-full sm:w-40 h-12 medical-input text-white">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="futuristic-card border-0">
-              <SelectItem value="date">Por Data</SelectItem>
-              <SelectItem value="patient">Por Paciente</SelectItem>
+              <SelectItem value="date" className="text-white">Por Data</SelectItem>
+              <SelectItem value="patient" className="text-white">Por Paciente</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -184,38 +183,38 @@ const MeasurementHistory = () => {
         <Card className="futuristic-card border-0">
           <CardContent className="p-6 text-center">
             <div className="flex items-center justify-center mb-3">
-              <div className="p-3 bg-blue-100 rounded-xl">
-                <TrendingUp className="w-6 h-6 text-blue-600" />
+              <div className="p-3 bg-blue-500/30 rounded-xl">
+                <TrendingUp className="w-6 h-6 text-blue-200" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-blue-900 mb-1">{measurements.length}</div>
-            <div className="text-sm text-slate-600">Total de Medições</div>
+            <div className="text-3xl font-bold text-white mb-1">{measurements.length}</div>
+            <div className="text-sm text-blue-200">Total de Medições</div>
           </CardContent>
         </Card>
         <Card className="futuristic-card border-0">
           <CardContent className="p-6 text-center">
             <div className="flex items-center justify-center mb-3">
-              <div className="p-3 bg-blue-100 rounded-xl">
-                <Users className="w-6 h-6 text-blue-600" />
+              <div className="p-3 bg-blue-500/30 rounded-xl">
+                <Users className="w-6 h-6 text-blue-200" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-blue-900 mb-1">
+            <div className="text-3xl font-bold text-white mb-1">
               {new Set(measurements.map(m => m.patient_id)).size}
             </div>
-            <div className="text-sm text-slate-600">Pacientes Avaliadas</div>
+            <div className="text-sm text-blue-200">Pacientes Avaliadas</div>
           </CardContent>
         </Card>
         <Card className="futuristic-card border-0">
           <CardContent className="p-6 text-center">
             <div className="flex items-center justify-center mb-3">
-              <div className="p-3 bg-blue-100 rounded-xl">
-                <Zap className="w-6 h-6 text-blue-600" />
+              <div className="p-3 bg-blue-500/30 rounded-xl">
+                <Zap className="w-6 h-6 text-blue-200" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-blue-900 mb-1">
+            <div className="text-3xl font-bold text-white mb-1">
               {measurements.filter(m => m.scale_method === "lidar").length}
             </div>
-            <div className="text-sm text-slate-600">Medições LiDAR</div>
+            <div className="text-sm text-blue-200">Medições Automáticas</div>
           </CardContent>
         </Card>
       </div>
@@ -228,23 +227,23 @@ const MeasurementHistory = () => {
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 {/* Patient Info */}
                 <div className="flex items-center space-x-6">
-                  <Avatar className="h-16 w-16 border-2 border-blue-200">
-                    <AvatarFallback className="bg-gradient-to-br from-blue-100 to-blue-50 text-blue-900 font-bold text-lg">
+                  <Avatar className="h-16 w-16 border-2 border-blue-400/50">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold text-lg">
                       {getInitials(measurement.patient_name)}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="font-semibold text-xl text-slate-800 mb-2">{measurement.patient_name}</h3>
-                    <div className="flex items-center gap-4 text-sm text-slate-600">
+                    <h3 className="font-semibold text-xl text-white mb-2">{measurement.patient_name}</h3>
+                    <div className="flex items-center gap-4 text-sm text-blue-200">
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-blue-500" />
+                        <Calendar className="w-4 h-4 text-blue-400" />
                         {formatDate(measurement.date)}
                       </div>
                       <Badge 
-                        variant={measurement.scale_method === "lidar" ? "default" : "secondary"}
-                        className={measurement.scale_method === "lidar" ? "bg-blue-900 hover:bg-blue-800" : ""}
+                        variant="secondary"
+                        className="bg-blue-500/30 text-blue-100 border-blue-400/30"
                       >
-                        {measurement.scale_method === "lidar" ? "LiDAR" : "Régua"}
+                        Medição Automática
                       </Badge>
                     </div>
                   </div>
@@ -252,31 +251,31 @@ const MeasurementHistory = () => {
 
                 {/* Measurements Preview */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="text-center p-3 bg-blue-50/50 rounded-lg">
-                    <div className="text-lg font-bold text-blue-900">{measurement.ij_ap_cm} cm</div>
-                    <div className="text-xs text-slate-500 font-medium">IJ-AP</div>
+                  <div className="text-center p-3 bg-blue-500/20 rounded-lg border border-blue-400/30">
+                    <div className="text-lg font-bold text-white">{measurement.ij_ap_cm} cm</div>
+                    <div className="text-xs text-blue-200 font-medium">IJ-AP</div>
                   </div>
-                  <div className="text-center p-3 bg-blue-50/50 rounded-lg">
-                    <div className="text-lg font-bold text-blue-900">{measurement.ax_ap_cm} cm</div>
-                    <div className="text-xs text-slate-500 font-medium">Ax-AP</div>
+                  <div className="text-center p-3 bg-blue-500/20 rounded-lg border border-blue-400/30">
+                    <div className="text-lg font-bold text-white">{measurement.ax_ap_cm} cm</div>
+                    <div className="text-xs text-blue-200 font-medium">Ax-AP</div>
                   </div>
-                  <div className="text-center p-3 bg-blue-50/50 rounded-lg">
-                    <div className="text-lg font-bold text-blue-900">{measurement.xi_pap_cm} cm</div>
-                    <div className="text-xs text-slate-500 font-medium">XI-PAP</div>
+                  <div className="text-center p-3 bg-blue-500/20 rounded-lg border border-blue-400/30">
+                    <div className="text-lg font-bold text-white">{measurement.xi_pap_cm} cm</div>
+                    <div className="text-xs text-blue-200 font-medium">XI-PAP</div>
                   </div>
-                  <div className="text-center p-3 bg-blue-50/50 rounded-lg">
-                    <div className="text-lg font-bold text-blue-900">{measurement.base_cm} cm</div>
-                    <div className="text-xs text-slate-500 font-medium">Base</div>
+                  <div className="text-center p-3 bg-blue-500/20 rounded-lg border border-blue-400/30">
+                    <div className="text-lg font-bold text-white">{measurement.base_cm} cm</div>
+                    <div className="text-xs text-blue-200 font-medium">Base</div>
                   </div>
                 </div>
 
                 {/* Actions */}
                 <div className="flex gap-3">
-                  <Button size="sm" variant="outline" className="border-blue-200 hover:bg-blue-50">
+                  <Button size="sm" variant="outline" className="border-blue-400/30 hover:bg-blue-500/20 text-blue-100">
                     <Eye className="w-4 h-4 mr-2" />
                     Visualizar
                   </Button>
-                  <Button size="sm" variant="outline" className="border-blue-200 hover:bg-blue-50">
+                  <Button size="sm" variant="outline" className="border-blue-400/30 hover:bg-blue-500/20 text-blue-100">
                     <Download className="w-4 h-4 mr-2" />
                     PDF
                   </Button>
@@ -285,12 +284,12 @@ const MeasurementHistory = () => {
 
               {/* AI Observations */}
               {measurement.ai_observations && (
-                <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-slate-50 rounded-xl border border-blue-100/50">
-                  <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-blue-600" />
+                <div className="mt-6 p-4 bg-gradient-to-r from-blue-500/20 to-blue-600/20 rounded-xl border border-blue-400/30">
+                  <h4 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-blue-400" />
                     Observações da IA:
                   </h4>
-                  <p className="text-sm text-slate-600 leading-relaxed">{measurement.ai_observations}</p>
+                  <p className="text-sm text-blue-100 leading-relaxed">{measurement.ai_observations}</p>
                 </div>
               )}
             </CardContent>
@@ -301,13 +300,13 @@ const MeasurementHistory = () => {
       {filteredMeasurements.length === 0 && (
         <div className="text-center py-16">
           <div className="futuristic-card max-w-md mx-auto p-12">
-            <History className="w-20 h-20 text-blue-300 mx-auto mb-6" />
-            <h3 className="text-xl font-semibold text-slate-700 mb-4">
+            <History className="w-20 h-20 text-blue-400 mx-auto mb-6" />
+            <h3 className="text-xl font-semibold text-white mb-4">
               {searchTerm || selectedPatient !== "all" 
                 ? "Nenhuma medição encontrada" 
                 : "Nenhuma medição realizada"}
             </h3>
-            <p className="text-slate-500">
+            <p className="text-blue-200">
               {searchTerm || selectedPatient !== "all"
                 ? "Tente ajustar os filtros de busca"
                 : "As medições aparecerão aqui após serem realizadas"}

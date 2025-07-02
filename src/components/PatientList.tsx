@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -85,12 +84,12 @@ export const PatientList: React.FC = () => {
                 <CardContent className="p-6">
                   <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-4">
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${measurement.scale_method === 'lidar' ? 'bg-blue-500' : 'bg-green-500'}`}>
-                        {measurement.scale_method === 'lidar' ? <Smartphone className="w-4 h-4 text-white" /> : <Ruler className="w-4 h-4 text-white" />}
+                      <div className="p-2 rounded-lg bg-blue-500">
+                        <Smartphone className="w-4 h-4 text-white" />
                       </div>
                       <div>
                         <p className="font-semibold text-white">
-                          Método: {measurement.scale_method === 'lidar' ? 'LiDAR' : 'Régua'}
+                          Método: Medição Automática
                         </p>
                         <p className="text-sm text-blue-200 flex items-center gap-1">
                           <Clock className="w-3 h-3" />
@@ -106,7 +105,7 @@ export const PatientList: React.FC = () => {
                   {/* Measurement Preview */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                     {Object.entries(measurement.measurements_data as Record<string, number>).slice(0, 4).map(([key, value]) => (
-                      <div key={key} className="bg-blue-500/20 p-3 rounded-lg text-center">
+                      <div key={key} className="bg-blue-500/20 p-3 rounded-lg text-center border border-blue-400/30">
                         <div className="font-bold text-white">{value.toFixed(1)} cm</div>
                         <div className="text-xs text-blue-200 capitalize">
                           {key.replace(/_/g, ' ')}
@@ -116,12 +115,12 @@ export const PatientList: React.FC = () => {
                   </div>
                   
                   {measurement.ai_observations && (
-                    <div className="bg-purple-500/20 border border-purple-400/30 rounded-lg p-4">
-                      <h4 className="text-sm font-semibold text-purple-100 mb-2 flex items-center gap-2">
-                        <Brain className="w-4 h-4" />
+                    <div className="bg-blue-500/20 border border-blue-400/30 rounded-lg p-4">
+                      <h4 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
+                        <Brain className="w-4 h-4 text-blue-400" />
                         Observações da IA:
                       </h4>
-                      <p className="text-sm text-purple-100 leading-relaxed">{measurement.ai_observations}</p>
+                      <p className="text-sm text-blue-100 leading-relaxed">{measurement.ai_observations}</p>
                     </div>
                   )}
                 </CardContent>
