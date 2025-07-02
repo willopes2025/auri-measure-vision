@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Camera, Ruler, Smartphone, Save, Brain, Image, User, Settings, Upload, Zap, Loader2 } from 'lucide-react';
+import { Camera, Save, Brain, Image, User, Upload, Zap, Loader2 } from 'lucide-react';
 import { usePatients } from '@/hooks/usePatients';
 import { useMeasurements } from '@/hooks/useMeasurements';
 import { useRoboflow } from '@/hooks/useRoboflow';
@@ -28,7 +28,6 @@ export const NewMeasurementForm: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [selectedPatient, setSelectedPatient] = useState('');
-  const [scaleMethod, setScaleMethod] = useState<'lidar' | 'ruler'>('ruler');
   const [measurements, setMeasurements] = useState<MeasurementData>({
     distancia_intermamilar: 0,
     altura_mamilo_sulco: 0,
@@ -94,8 +93,14 @@ export const NewMeasurementForm: React.FC = () => {
       );
 
       if (roboflowResult && roboflowResult.measurements) {
+        // Converter as medições para o formato correto
+        const convertedMeasurements: MeasurementData = {};
+        Object.keys(roboflowResult.measurements).forEach(key => {
+          convertedMeasurements[key] = roboflowResult.measurements[key] || 0;
+        });
+        
         // Preencher as medições automaticamente
-        setMeasurements(roboflowResult.measurements);
+        setMeasurements(convertedMeasurements);
         
         toast({
           title: "Medições calculadas",
@@ -112,7 +117,7 @@ export const NewMeasurementForm: React.FC = () => {
         
         const aiResult = await analyzeWithAI({
           imageUrl,
-          measurements: roboflowResult.measurements,
+          measurements: convertedMeasurements,
           patientInfo: selectedPatientData
         });
 
@@ -157,7 +162,7 @@ export const NewMeasurementForm: React.FC = () => {
       await addMeasurement(
         {
           patient_id: selectedPatient,
-          scale_method: scaleMethod,
+          scale_method: 'photo_analysis', // Método fixo para análise de foto
           measurements_data: measurements,
           ai_observations: aiObservations || null,
           image_url: imageUrl || null,
@@ -198,7 +203,7 @@ export const NewMeasurementForm: React.FC = () => {
                 Nova Avaliação Mamária
               </CardTitle>
               <p className="text-blue-200 mt-1 text-sm sm:text-base">
-                Realize uma nova medição utilizando IA e tecnologia avançada
+                Análise automática de medições utilizando IA e processamento de imagem
               </p>
             </div>
           </div>
@@ -264,67 +269,17 @@ export const NewMeasurementForm: React.FC = () => {
               )}
             </div>
 
-            {/* Method Selection */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-6 sm:w-8 h-6 sm:h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                  <Settings className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
-                </div>
-                <Label className="text-base sm:text-lg font-semibold text-white">Método de Medição</Label>
-              </div>
-              
-              <Select value={scaleMethod} onValueChange={(value: 'lidar' | 'ruler') => setScaleMethod(value)}>
-                <SelectTrigger className="h-10 sm:h-12 medical-input text-white">
-                  <SelectValue className="text-white" />
-                </SelectTrigger>
-                <SelectContent className="bg-blue-800/95 border border-blue-400/30 backdrop-blur-sm">
-                  <SelectItem value="ruler" className="text-white hover:bg-blue-700/50 focus:bg-blue-700/50">
-                    <div className="flex items-center gap-3 py-2">
-                      <div className="w-6 sm:w-8 h-6 sm:h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                        <Ruler className="h-3 sm:h-4 w-3 sm:w-4 text-white" />
-                      </div>
-                      <div>
-                        <div className="font-medium text-white">Régua Manual</div>
-                        <div className="text-sm text-blue-200">Método tradicional com régua física</div>
-                      </div>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="lidar" className="text-white hover:bg-blue-700/50 focus:bg-blue-700/50">
-                    <div className="flex items-center gap-3 py-2">
-                      <div className="w-6 sm:w-8 h-6 sm:h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                        <Smartphone className="h-3 sm:h-4 w-3 sm:w-4 text-white" />
-                      </div>
-                      <div>
-                        <div className="font-medium text-white">LiDAR (iPhone)</div>
-                        <div className="text-sm text-blue-200">Tecnologia 3D de alta precisão</div>
-                      </div>
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-
-              <div className="bg-blue-500/20 border border-blue-400/30 rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <Badge variant={scaleMethod === 'lidar' ? 'default' : 'secondary'} className={scaleMethod === 'lidar' ? 'bg-blue-600 text-white' : 'bg-green-500/30 text-green-100 border-green-400/30'}>
-                    {scaleMethod === 'lidar' ? 'LiDAR Ativo' : 'Régua Manual Ativa'}
-                  </Badge>
-                </div>
-                <p className="text-sm text-blue-200">
-                  {scaleMethod === 'lidar' 
-                    ? 'Método de alta precisão utilizando sensor LiDAR do iPhone para medições 3D sub-milimétricas.'
-                    : 'Método tradicional utilizando régua física para medições manuais precisas e confiáveis.'
-                  }
-                </p>
-              </div>
-            </div>
-
             {/* Image Import Section */}
             <div className="space-y-4">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-6 sm:w-8 h-6 sm:h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                   <Image className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
                 </div>
-                <Label className="text-base sm:text-lg font-semibold text-white">Imagem de Referência</Label>
+                <Label className="text-base sm:text-lg font-semibold text-white">Imagem para Análise</Label>
+                <Badge className="bg-green-500/30 text-green-100 border-green-400/30">
+                  <Brain className="h-3 w-3 mr-1" />
+                  Análise Automática
+                </Badge>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
@@ -405,9 +360,9 @@ export const NewMeasurementForm: React.FC = () => {
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-6 sm:w-8 h-6 sm:h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                  <Ruler className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
+                  <Brain className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
                 </div>
-                <Label className="text-base sm:text-lg font-semibold text-white">Medidas Corporais</Label>
+                <Label className="text-base sm:text-lg font-semibold text-white">Medidas Calculadas</Label>
                 {extractedMeasurements && (
                   <Badge className="bg-green-500/30 text-green-100 border-green-400/30">
                     <Brain className="h-3 w-3 mr-1" />
