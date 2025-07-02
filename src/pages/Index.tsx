@@ -5,14 +5,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PatientForm } from "@/components/PatientForm";
 import { PatientList } from "@/components/PatientList";
 import { NewMeasurementForm } from "@/components/NewMeasurementForm";
-import { MeasurementHistory } from "@/components/MeasurementHistory";
+import MeasurementHistory from "@/components/MeasurementHistory";
 import { DatabaseStatus } from "@/components/DatabaseStatus";
 import UserProfile from "@/components/UserProfile";
 import { Users, Activity, BarChart3, Plus } from "lucide-react";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("patients");
-  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen blue-gradient-bg">
@@ -94,7 +93,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <PatientList onSelectPatient={setSelectedPatientId} />
+                  <PatientList />
                 </CardContent>
               </Card>
             </div>
@@ -112,7 +111,7 @@ const Index = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <NewMeasurementForm selectedPatientId={selectedPatientId} />
+                <NewMeasurementForm />
               </CardContent>
             </Card>
           </TabsContent>
