@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -5,11 +6,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Camera, Ruler, Smartphone, Save, Brain, Image, User, Settings, Upload } from 'lucide-react';
+import { Camera, Ruler, Smartphone, Save, Brain, Image, User, Settings, Upload, Zap, Loader2 } from 'lucide-react';
 import { usePatients } from '@/hooks/usePatients';
 import { useMeasurements } from '@/hooks/useMeasurements';
+import { useRoboflow } from '@/hooks/useRoboflow';
+import { useAIAnalysis } from '@/hooks/useAIAnalysis';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface MeasurementData {
   [key: string]: number;
@@ -18,6 +22,8 @@ interface MeasurementData {
 export const NewMeasurementForm: React.FC = () => {
   const { patients } = usePatients();
   const { addMeasurement } = useMeasurements();
+  const { isAnalyzing, detections, extractedMeasurements, analyzeWithRoboflow } = useRoboflow();
+  const { loading: aiLoading, analysis, analyzeWithAI } = useAIAnalysis();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -34,6 +40,11 @@ export const NewMeasurementForm: React.FC = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [roboflowConfig] = useState({
+    apiKey: 'your-roboflow-api-key', // Configure com sua API key
+    modelEndpoint: 'https://detect.roboflow.com/your-model/1', // Configure com seu endpoint
+  });
 
   const measurementLabels = {
     distancia_intermamilar: 'Distância Intermamilar (cm)',
@@ -54,6 +65,75 @@ export const NewMeasurementForm: React.FC = () => {
         title: "Imagem carregada",
         description: `${file.name} foi carregada com sucesso.`,
       });
+    }
+  };
+
+  const handleRunAnalysis = async () => {
+    if (!selectedImage) {
+      toast({
+        title: "Erro",
+        description: "Por favor, selecione uma imagem primeiro.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+    
+    try {
+      // Etapa 1: Análise com Roboflow
+      toast({
+        title: "Iniciando análise",
+        description: "Detectando pontos anatômicos com Roboflow...",
+      });
+
+      const roboflowResult = await analyzeWithRoboflow(
+        selectedImage,
+        roboflowConfig.apiKey,
+        roboflowConfig.modelEndpoint
+      );
+
+      if (roboflowResult && roboflowResult.measurements) {
+        // Preencher as medições automaticamente
+        setMeasurements(roboflowResult.measurements);
+        
+        toast({
+          title: "Medições calculadas",
+          description: "Pontos anatômicos detectados e medidas calculadas com sucesso!",
+        });
+
+        // Etapa 2: Análise médica com IA
+        toast({
+          title: "Gerando avaliação médica",
+          description: "Analisando medições com inteligência artificial...",
+        });
+
+        const selectedPatientData = patients.find(p => p.id === selectedPatient);
+        
+        const aiResult = await analyzeWithAI({
+          imageUrl,
+          measurements: roboflowResult.measurements,
+          patientInfo: selectedPatientData
+        });
+
+        if (aiResult.analysis) {
+          setAiObservations(aiResult.analysis);
+          
+          toast({
+            title: "Análise completa",
+            description: "Avaliação médica gerada com sucesso!",
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Erro na análise:', error);
+      toast({
+        title: "Erro na análise",
+        description: "Não foi possível processar a imagem. Verifique as configurações.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -258,6 +338,27 @@ export const NewMeasurementForm: React.FC = () => {
                   Importar Imagem
                 </Button>
                 
+                {selectedImage && (
+                  <Button
+                    type="button"
+                    onClick={handleRunAnalysis}
+                    disabled={isProcessing || isAnalyzing || aiLoading}
+                    className="flex-1 h-12 bg-gradient-to-r from-green-600 to-green-500 text-white hover:from-green-700 hover:to-green-600 disabled:opacity-50"
+                  >
+                    {isProcessing || isAnalyzing || aiLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Processando...
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="w-4 h-4 mr-2" />
+                        RUN - Calcular Medidas
+                      </>
+                    )}
+                  </Button>
+                )}
+                
                 <Input
                   ref={fileInputRef}
                   type="file"
@@ -287,6 +388,17 @@ export const NewMeasurementForm: React.FC = () => {
                   </div>
                 </div>
               )}
+
+              {(isProcessing || isAnalyzing || aiLoading) && (
+                <Alert>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <AlertDescription className="text-blue-100">
+                    {isAnalyzing && "Detectando pontos anatômicos com Roboflow..."}
+                    {aiLoading && "Gerando avaliação médica com IA..."}
+                    {isProcessing && !isAnalyzing && !aiLoading && "Processando imagem..."}
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
 
             {/* Measurements */}
@@ -296,6 +408,12 @@ export const NewMeasurementForm: React.FC = () => {
                   <Ruler className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
                 </div>
                 <Label className="text-base sm:text-lg font-semibold text-white">Medidas Corporais</Label>
+                {extractedMeasurements && (
+                  <Badge className="bg-green-500/30 text-green-100 border-green-400/30">
+                    <Brain className="h-3 w-3 mr-1" />
+                    Calculado pela IA
+                  </Badge>
+                )}
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
@@ -332,18 +450,23 @@ export const NewMeasurementForm: React.FC = () => {
                 <div className="w-6 sm:w-8 h-6 sm:h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                   <Brain className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
                 </div>
-                <Label className="text-base sm:text-lg font-semibold text-white">Observações da IA (Opcional)</Label>
+                <Label className="text-base sm:text-lg font-semibold text-white">Avaliação Médica da IA</Label>
+                {analysis && (
+                  <Badge className="bg-purple-500/30 text-purple-100 border-purple-400/30">
+                    Gerado pela IA
+                  </Badge>
+                )}
               </div>
               
               <Textarea
                 value={aiObservations}
                 onChange={(e) => setAiObservations(e.target.value)}
-                placeholder="Observações automáticas geradas pela inteligência artificial..."
-                rows={4}
+                placeholder="A avaliação médica aparecerá aqui após o processamento da imagem..."
+                rows={6}
                 className="medical-input resize-none text-white placeholder-blue-200"
               />
               <p className="text-sm text-blue-200">
-                Adicione observações técnicas ou comentários gerados pelo sistema de IA
+                Avaliação médica automática baseada nas medições calculadas pela IA
               </p>
             </div>
 
@@ -355,7 +478,7 @@ export const NewMeasurementForm: React.FC = () => {
                 disabled={isSubmitting || !selectedPatient}
               >
                 <Save className="h-4 sm:h-5 w-4 sm:w-5 mr-3" />
-                {isSubmitting ? 'Salvando Avaliação...' : 'Executar e Salvar Avaliação Completa'}
+                {isSubmitting ? 'Salvando Avaliação...' : 'Salvar Avaliação Completa'}
               </Button>
               
               {!selectedPatient && (
