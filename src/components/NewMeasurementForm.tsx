@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Camera, Ruler, Smartphone, Save, Brain, Image, User, Settings } from 'lucide-react';
+import { Camera, Ruler, Smartphone, Save, Brain, Image, User, Settings, Upload } from 'lucide-react';
 import { usePatients } from '@/hooks/usePatients';
 import { useMeasurements } from '@/hooks/useMeasurements';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 
 interface MeasurementData {
   [key: string]: number;
@@ -17,6 +18,8 @@ interface MeasurementData {
 export const NewMeasurementForm: React.FC = () => {
   const { patients } = usePatients();
   const { addMeasurement } = useMeasurements();
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [selectedPatient, setSelectedPatient] = useState('');
   const [scaleMethod, setScaleMethod] = useState<'lidar' | 'ruler'>('ruler');
@@ -29,6 +32,7 @@ export const NewMeasurementForm: React.FC = () => {
   });
   const [aiObservations, setAiObservations] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const measurementLabels = {
@@ -37,6 +41,20 @@ export const NewMeasurementForm: React.FC = () => {
     projecao_mamaria: 'Projeção Mamária (cm)',
     largura_base_mama: 'Largura Base da Mama (cm)',
     altura_mama: 'Altura da Mama (cm)',
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      const imageUrl = URL.createObjectURL(file);
+      setImageUrl(imageUrl);
+      
+      toast({
+        title: "Imagem carregada",
+        description: `${file.name} foi carregada com sucesso.`,
+      });
+    }
   };
 
   const handleMeasurementChange = (key: string, value: string) => {
@@ -78,6 +96,7 @@ export const NewMeasurementForm: React.FC = () => {
       });
       setAiObservations('');
       setImageUrl('');
+      setSelectedImage(null);
     } finally {
       setIsSubmitting(false);
     }
@@ -123,9 +142,13 @@ export const NewMeasurementForm: React.FC = () => {
                 <SelectTrigger className="h-10 sm:h-12 medical-input text-white">
                   <SelectValue placeholder="Selecione um paciente cadastrado" className="text-white" />
                 </SelectTrigger>
-                <SelectContent className="futuristic-card border-0">
+                <SelectContent className="bg-blue-800/95 border border-blue-400/30 backdrop-blur-sm">
                   {patients.map((patient) => (
-                    <SelectItem key={patient.id} value={patient.id}>
+                    <SelectItem 
+                      key={patient.id} 
+                      value={patient.id}
+                      className="text-white hover:bg-blue-700/50 focus:bg-blue-700/50"
+                    >
                       <div className="flex items-center gap-3 py-1">
                         <div className="w-6 sm:w-8 h-6 sm:h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white text-xs font-bold">
                           {patient.nome.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
@@ -174,8 +197,8 @@ export const NewMeasurementForm: React.FC = () => {
                 <SelectTrigger className="h-10 sm:h-12 medical-input text-white">
                   <SelectValue className="text-white" />
                 </SelectTrigger>
-                <SelectContent className="futuristic-card border-0">
-                  <SelectItem value="ruler">
+                <SelectContent className="bg-blue-800/95 border border-blue-400/30 backdrop-blur-sm">
+                  <SelectItem value="ruler" className="text-white hover:bg-blue-700/50 focus:bg-blue-700/50">
                     <div className="flex items-center gap-3 py-2">
                       <div className="w-6 sm:w-8 h-6 sm:h-8 bg-green-500 rounded-lg flex items-center justify-center">
                         <Ruler className="h-3 sm:h-4 w-3 sm:w-4 text-white" />
@@ -186,7 +209,7 @@ export const NewMeasurementForm: React.FC = () => {
                       </div>
                     </div>
                   </SelectItem>
-                  <SelectItem value="lidar">
+                  <SelectItem value="lidar" className="text-white hover:bg-blue-700/50 focus:bg-blue-700/50">
                     <div className="flex items-center gap-3 py-2">
                       <div className="w-6 sm:w-8 h-6 sm:h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                         <Smartphone className="h-3 sm:h-4 w-3 sm:w-4 text-white" />
@@ -213,6 +236,57 @@ export const NewMeasurementForm: React.FC = () => {
                   }
                 </p>
               </div>
+            </div>
+
+            {/* Image Import Section */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-6 sm:w-8 h-6 sm:h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                  <Image className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
+                </div>
+                <Label className="text-base sm:text-lg font-semibold text-white">Imagem de Referência</Label>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex-1 h-12 border-blue-400/30 bg-blue-500/20 text-white hover:bg-blue-500/30 hover:text-white"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  Importar Imagem
+                </Button>
+                
+                <Input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+              </div>
+
+              {selectedImage && (
+                <div className="bg-blue-500/20 border border-blue-400/30 rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center overflow-hidden">
+                      <img
+                        src={imageUrl}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-blue-100">Imagem Carregada:</h4>
+                      <p className="text-sm text-blue-200">{selectedImage.name}</p>
+                      <p className="text-xs text-blue-300">
+                        Tamanho: {(selectedImage.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Measurements */}
@@ -250,27 +324,6 @@ export const NewMeasurementForm: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Image URL */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-6 sm:w-8 h-6 sm:h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                  <Image className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
-                </div>
-                <Label className="text-base sm:text-lg font-semibold text-white">Imagem de Referência (Opcional)</Label>
-              </div>
-              
-              <Input
-                type="url"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://exemplo.com/imagem.jpg"
-                className="medical-input h-10 sm:h-12 text-white placeholder-blue-200"
-              />
-              <p className="text-sm text-blue-200">
-                Adicione uma URL da imagem utilizada para as medições (opcional)
-              </p>
             </div>
 
             {/* AI Observations */}
