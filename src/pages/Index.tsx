@@ -8,7 +8,7 @@ import { NewMeasurementForm } from "@/components/NewMeasurementForm";
 import MeasurementHistory from "@/components/MeasurementHistory";
 import { DatabaseStatus } from "@/components/DatabaseStatus";
 import UserProfile from "@/components/UserProfile";
-import { Users, Activity, BarChart3, Plus } from "lucide-react";
+import { Users, Activity, Plus } from "lucide-react";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("patients");
@@ -34,7 +34,7 @@ const Index = () => {
 
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6 bg-blue-800/50">
+          <TabsList className="grid w-full grid-cols-3 mb-6 bg-blue-800/50">
             <TabsTrigger 
               value="patients" 
               className="text-white data-[state=active]:bg-blue-600 flex items-center gap-2"
@@ -55,13 +55,6 @@ const Index = () => {
             >
               <Activity className="h-4 w-4" />
               Medições
-            </TabsTrigger>
-            <TabsTrigger 
-              value="history" 
-              className="text-white data-[state=active]:bg-blue-600 flex items-center gap-2"
-            >
-              <BarChart3 className="h-4 w-4" />
-              Histórico
             </TabsTrigger>
           </TabsList>
 
@@ -121,27 +114,10 @@ const Index = () => {
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Activity className="h-5 w-5" />
-                  Medições Recentes
+                  Histórico de Medições
                 </CardTitle>
                 <CardDescription className="text-blue-100">
-                  Visualize as medições mais recentes
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <MeasurementHistory />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="history" className="space-y-6">
-            <Card className="futuristic-card">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5" />
-                  Histórico Completo
-                </CardTitle>
-                <CardDescription className="text-blue-100">
-                  Análise completa do histórico de medições
+                  Visualize e analise todas as medições realizadas
                 </CardDescription>
               </CardHeader>
               <CardContent>
