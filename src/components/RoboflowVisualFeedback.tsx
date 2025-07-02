@@ -34,8 +34,7 @@ export const RoboflowVisualFeedback: React.FC<RoboflowVisualFeedbackProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Aguardar o carregamento da imagem
-    image.onload = () => {
+    const drawCanvas = () => {
       // Ajustar canvas para o tamanho da imagem
       canvas.width = image.naturalWidth;
       canvas.height = image.naturalHeight;
@@ -79,9 +78,12 @@ export const RoboflowVisualFeedback: React.FC<RoboflowVisualFeedbackProps> = ({
       });
     };
 
+    // Aguardar o carregamento da imagem
+    image.onload = drawCanvas;
+
     // Se a imagem já está carregada
     if (image.complete) {
-      image.onload();
+      drawCanvas();
     }
   };
 
